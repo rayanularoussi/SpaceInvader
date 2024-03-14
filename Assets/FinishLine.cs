@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FinishLine : MonoBehaviour
 {
@@ -12,9 +13,9 @@ public class FinishLine : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "FinishLine")
+        if(other.tag == "Enemy")
         {
-            
+            SceneManager.LoadScene("Credits");
         }
     }
 }

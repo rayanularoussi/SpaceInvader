@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class ScoreManager : MonoBehaviour
     public int enemyKilledValue = 0;
     public TMP_Text scoreText;
     public TMP_Text hiScoreText;
-    public string hiScoreFileName; // Name of the file in the Resources folder
+    public string hiScoreFileName;
+    public int enemyRemaining = 55;
 
     void Start()
     {
@@ -18,6 +20,10 @@ public class ScoreManager : MonoBehaviour
 
     void Update()
     {
+        if(enemyRemaining == 0)
+        {
+            SceneManager.LoadScene("Credits");
+        }
         if (enemyKilledValue != 0)
         {
             score += enemyKilledValue;

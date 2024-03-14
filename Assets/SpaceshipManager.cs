@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class SpaceshipManager : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class SpaceshipManager : MonoBehaviour
     public GameObject life1;
     public GameObject life2;
     private Animator animator;
+    public AudioClip shootSound;
+    public AudioClip boomSound;
+    public AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
@@ -20,21 +24,23 @@ public class SpaceshipManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         if(Input.GetKey(KeyCode.Space) && !bulletShoted)
         {
             Vector3 pos = transform.position;
             GameObject instance = Instantiate(bulletPrefab, pos, transform.rotation);
+            audioSource.PlayOneShot(shootSound);
+            animator.Play("Shoot");
             bulletShoted = true;
         }
         if(Input.GetKey(KeyCode.Q))
         {
-            transform.position += new Vector3(-0.01f, 0, 0);
+            transform.position += new Vector3(-0.02f, 0, 0);
         }
         if(Input.GetKey(KeyCode.D))
         {
-            transform.position += new Vector3(0.01f, 0, 0);
+            transform.position += new Vector3(0.02f, 0, 0);
         }
     }
     void LivesUpdate()
@@ -56,12 +62,19 @@ public class SpaceshipManager : MonoBehaviour
             }
             else
             {
-                Destroy(gameObject);
+                StartCoroutine(LoadNextSceneAfterDelay(0.5f));
             }
             Destroy(other.gameObject);
             lives--;
             LivesUpdate();
+            audioSource.PlayOneShot(boomSound);
             animator.Play("shield");
         }
+    }
+
+    IEnumerator LoadNextSceneAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene("Credits");
     }
 }
